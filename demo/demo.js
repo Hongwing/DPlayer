@@ -2,7 +2,7 @@
 const stats = new Stats();
 stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom);
-function animate () {
+function animate() {
     stats.begin();
     // monitored code goes here
     stats.end();
@@ -14,7 +14,7 @@ requestAnimationFrame(animate);
 initPlayers();
 handleEvent();
 
-function handleEvent () {
+function handleEvent() {
     document.getElementById('dplayer-dialog').addEventListener('click', (e) => {
         const $clickDom = e.currentTarget;
         const isShowStatus = $clickDom.getAttribute('data-show');
@@ -35,7 +35,7 @@ function handleEvent () {
     });
 }
 
-function initPlayers () {
+function initPlayers() {
     // dplayer-float
     window.dpFloat = new DPlayer({
         container: document.getElementById('dplayer-container'),
@@ -85,11 +85,17 @@ function initPlayers () {
         logo: 'https://i.loli.net/2019/06/06/5cf8c5d94521136430.png',
         volume: 0.2,
         mutex: true,
+        extra: function () {
+            console.info('extra console');
+        },
         video: {
-            url: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4',
+            type: 'flv',
+            url: 'http://localhost:4001/703.flv',
+            // url: 'http://pili-live-hdl.dfsdedu.cn/dfsd/703.flv?sign=6ceac3171752cebaffb85a4d495ca480&t=5d118e4a',
+            // url: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4',
             pic: 'https://i.loli.net/2019/06/06/5cf8c5d9c57b510947.png',
             thumbnails: 'https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg',
-            type: 'auto'
+            // type: 'auto'
         },
         subtitle: {
             url: 'https://moeplayer.b0.upaiyun.com/dplayer/hikarunara.vtt',
@@ -115,30 +121,86 @@ function initPlayers () {
         ]
     });
 
-    const events = [
-        'abort', 'canplay', 'canplaythrough', 'durationchange', 'emptied', 'ended', 'error',
-        'loadeddata', 'loadedmetadata', 'loadstart', 'mozaudioavailable', 'pause', 'play',
-        'playing', 'ratechange', 'seeked', 'seeking', 'stalled',
-        'volumechange', 'waiting',
-        'screenshot',
-        'thumbnails_show', 'thumbnails_hide',
-        'danmaku_show', 'danmaku_hide', 'danmaku_clear',
-        'danmaku_loaded', 'danmaku_send', 'danmaku_opacity',
-        'contextmenu_show', 'contextmenu_hide',
-        'notice_show', 'notice_hide',
-        'quality_start', 'quality_end',
-        'destroy',
-        'resize',
-        'fullscreen', 'fullscreen_cancel', 'webfullscreen', 'webfullscreen_cancel',
-        'subtitle_show', 'subtitle_hide', 'subtitle_change'
-    ];
-    const eventsEle = document.getElementById('events');
-    for (let i = 0; i < events.length; i++) {
-        dp2.on(events[i], (info) => {
-            eventsEle.innerHTML += '<p>Event: ' + events[i] + '</p>';
-            eventsEle.scrollTop = eventsEle.scrollHeight;
+
+
+    // const events = [
+    //     'abort', 'canplay', 'canplaythrough', 'durationchange', 'emptied', 'ended', 'error',
+    //     'loadeddata', 'loadedmetadata', 'loadstart', 'mozaudioavailable', 'pause', 'play',
+    //     'playing', 'ratechange', 'seeked', 'seeking', 'stalled',
+    //     'volumechange', 'waiting',
+    //     'screenshot',
+    //     'thumbnails_show', 'thumbnails_hide',
+    //     'danmaku_show', 'danmaku_hide', 'danmaku_clear',
+    //     'danmaku_loaded', 'danmaku_send', 'danmaku_opacity',
+    //     'contextmenu_show', 'contextmenu_hide',
+    //     'notice_show', 'notice_hide',
+    //     'quality_start', 'quality_end',
+    //     'destroy',
+    //     'resize',
+    //     'fullscreen', 'fullscreen_cancel', 'webfullscreen', 'webfullscreen_cancel',
+    //     'subtitle_show', 'subtitle_hide', 'subtitle_change'
+    // ];
+    // const eventsEle = document.getElementById('events');
+    // for (let i = 0; i < events.length; i++) {
+    //     dp2.on(events[i], (info) => {
+    //         eventsEle.innerHTML += '<p>Event: ' + events[i] + '</p>';
+    //         eventsEle.scrollTop = eventsEle.scrollHeight;
+    //     });
+    // }
+
+    function reInit() {
+        if (window.dp2) {
+            window.dp2.destroy();
+        }
+        console.info('well reninit')
+        window.dp2 = new DPlayer({
+            container: document.getElementById('dplayer2'),
+            preload: 'none',
+            autoplay: false,
+            theme: '#FADFA3',
+            loop: true,
+            screenshot: true,
+            hotkey: true,
+            logo: 'https://i.loli.net/2019/06/06/5cf8c5d94521136430.png',
+            volume: 0.2,
+            mutex: true,
+            video: {
+                type: 'flv',
+                url: 'http://localhost:4001/703.flv',
+                // url: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4',
+                pic: 'https://i.loli.net/2019/06/06/5cf8c5d9c57b510947.png',
+                thumbnails: 'https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg',
+                // type: 'auto'
+            },
+            subtitle: {
+                url: 'https://moeplayer.b0.upaiyun.com/dplayer/hikarunara.vtt',
+                type: 'webvtt',
+                fontSize: '25px',
+                bottom: '10%',
+                color: '#b7daff'
+            },
+            danmaku: {
+                id: '9E2E3368B56CDBB4',
+                api: 'https://api.prprpr.me/dplayer/',
+                token: 'tokendemo',
+                maximum: 3000,
+                user: 'DIYgod',
+                bottom: '15%',
+                unlimited: true
+            },
+            contextmenu: [
+                {
+                    text: 'custom contextmenu',
+                    link: 'https://github.com/MoePlayer/DPlayer'
+                }
+            ]
         });
     }
+    // window.dp2.on('play', () => {
+    //     console.info('demo is ready play');
+    // })
+
+    // window.dp2.on('pause', reInit)
 
     // dp3
     // window.dp3 = new DPlayer({
@@ -234,25 +296,25 @@ function initPlayers () {
     // });
 }
 
-function clearPlayers () {
+function clearPlayers() {
     for (let i = 0; i < 6; i++) {
         window['dp' + (i + 1)].pause();
         document.getElementById('dplayer' + (i + 1)).innerHTML = '';
     }
 }
 
-function switchDPlayer () {
+function switchDPlayer() {
     if (dp2.option.danmaku.id !== '5rGf5Y2X55qu6Z2p') {
         dp2.switchVideo({
             url: 'http://static.smartisanos.cn/common/video/t1-ui.mp4',
             pic: 'http://static.smartisanos.cn/pr/img/video/video_03_cc87ce5bdb.jpg',
             type: 'auto',
         }, {
-            id: '5rGf5Y2X55qu6Z2p',
-            api: 'https://api.prprpr.me/dplayer/',
-            maximum: 3000,
-            user: 'DIYgod'
-        });
+                id: '5rGf5Y2X55qu6Z2p',
+                api: 'https://api.prprpr.me/dplayer/',
+                maximum: 3000,
+                user: 'DIYgod'
+            });
     } else {
         dp2.switchVideo({
             url: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4',
@@ -260,10 +322,10 @@ function switchDPlayer () {
             thumbnails: 'https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg',
             type: 'auto'
         }, {
-            id: '9E2E3368B56CDBB42',
-            api: 'https://api.prprpr.me/dplayer/',
-            maximum: 3000,
-            user: 'DIYgod'
-        });
+                id: '9E2E3368B56CDBB42',
+                api: 'https://api.prprpr.me/dplayer/',
+                maximum: 3000,
+                user: 'DIYgod'
+            });
     }
 }
